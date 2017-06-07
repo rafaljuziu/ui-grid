@@ -57,7 +57,7 @@ auto-selects the first row once the data is loaded.
 
 <example module="app">
   <file name="app.js">
-    var app = angular.module('app', ['ngTouch', 'ui.grid', 'ui.grid.selection']);
+    var app = angular.module('app', ['ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.cellNav', 'ngAria']);
 
     app.controller('MainCtrl', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
       $scope.gridOptions = {
@@ -192,7 +192,7 @@ auto-selects the first row once the data is loaded.
       <button type="button" class="btn btn-success" ng-click="toggleFullRowSelection()">Toggle full row selection</button>
       <br/>
 
-      <div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+      <div ui-grid="gridOptions" ui-grid-selection ui-grid-cellnav class="grid"></div>
     </div>
     <div ng-controller="SecondCtrl">
       Single selection grid without rowHeader, and allowing rowSelection to be toggled on and off dynamically:
@@ -206,5 +206,21 @@ auto-selects the first row once the data is loaded.
       width: 100%;
       height: 400px;
     }
+  </file>
+  <file name="scenario.js">
+    var gridTestUtils = require('../../test/e2e/gridTestUtils.spec.js');
+    var GridObjectTest = require('../../test/e2e/gridObjectTestUtils.spec.js');
+    var grid1 = new GridObjectTest('grid1');
+    describe('210 tutorial', function() {
+      it('should output aria text for cells that come from selection feature', function () {
+        var focuser = element(by.css('.ui-grid-focuser'));
+        gridTestUtils.click(focuser);
+        var arrowDown = 40;
+        focuser.sendKeys(arrowDown);
+        expect(element(by.css('.ui-grid-a11y-ariascreenreader-speakable.ui-grid-offscreen')).getInnerHtml()).toEqual('Row selected');
+        focuser.sendKeys(arrowDown);
+        expect(element(by.css('.ui-grid-a11y-ariascreenreader-speakable.ui-grid-offscreen')).getInnerHtml()).toEqual('Row not selected');
+      });
+    });
   </file>
 </example>

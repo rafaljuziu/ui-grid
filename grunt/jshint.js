@@ -43,6 +43,7 @@ module.exports = {
       console: false,
       dump: false,
       describe: false,
+      ddescribe: false,
       fdescribe: false,
       expect: false,
       inject: false,
